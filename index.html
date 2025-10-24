@@ -4,11 +4,18 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Test task</title>
+    <script>
+      document.documentElement.classList.add("no-scroll");
+    </script>
     <link rel="stylesheet" type="text/css" href="css/normalize.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <link rel="stylesheet" type="text/css" href="css/preloader.css" />
   </head>
   <body>
+    <div id="preloader" role="status" aria-live="polite" aria-label="Загрузка">
+      <div class="spinner" aria-hidden="true"></div>
+    </div>
     <section class="place">
       <div class="place-wrapper">
         <p class="place-title">It’s a hot place for your streaming fantasy.</p>
@@ -398,6 +405,30 @@
         </div>
       </div>
     </div>
+
+    <script>
+      (function () {
+        var done = false;
+        function hide() {
+          if (done) return;
+          done = true;
+          document.documentElement.classList.remove("no-scroll");
+          var el = document.getElementById("preloader");
+          if (!el) return;
+          el.classList.add("preloader--hide");
+          // Через короткую паузу удалим из DOM (чтобы не мешал tab-навигации)
+          setTimeout(function () {
+            el.remove();
+          }, 400);
+        }
+
+        // Основной триггер: полная загрузка страницы
+        window.addEventListener("load", hide);
+
+        // Защита от "вечной" загрузки: уберём через 8 сек. в любом случае
+        setTimeout(hide, 8000);
+      })();
+    </script>
 
     <script>
       document.addEventListener("DOMContentLoaded", function () {
